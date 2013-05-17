@@ -8,13 +8,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import shared.controller.SnakeInterface;
+import shared.controller.SnakeGameInterface;
 import shared.model.Food;
 import shared.model.Player;
 import shared.model.Snake;
 import shared.model.Tile;
 
-public class GameLogic implements SnakeInterface {
+public class GameLogic implements SnakeGameInterface {
 	
 	private static Color COLOR_TOP_LEFT = Color.RED;
 	private static Color COLOR_TOP_RIGHT = Color.MAGENTA;
@@ -24,8 +24,6 @@ public class GameLogic implements SnakeInterface {
 	private List<Player> players;
 	private List<Food> foodItems;
 	private Point bounds;
-	
-	private Map<String,Integer> statusMap;
 	
 	public GameLogic(Point bounds) {
 		this.bounds = bounds;
@@ -72,55 +70,9 @@ public class GameLogic implements SnakeInterface {
 			p.setSnake(snake);
 		}
 	}
-	/*
-	 * Goes through each status and update the players accordingly
-	 */
+	
 	private void interpretStatus() {
 		
-		Iterator<Player> iter = players.iterator();
-		while(iter.hasNext()) {
-			Player p = iter.next();
-			String name = p.getName();
-			Snake s = p.getSnake();
-			Point dir = new Point(p.getSnake().getDirection());
-			switch(statusMap.get(name)){
-				case MOVE_RIGHT:
-					s.setDirection(dir.y  * (-1), dir.x);
-					statusMap.put(name, MOVE_NONE);
-					break;
-				case MOVE_LEFT:
-					s.setDirection(dir.y, dir.x * (-1));
-					statusMap.put(name, MOVE_NONE);
-					break;
-				case MOVE_NONE:
-					//do nothing
-					break;
-				case MOVE_FASTER:
-					s.speedUp();
-					statusMap.put(name, MOVE_NONE);
-					break;
-				case MOVE_SLOWER:
-					s.slowDown();
-					statusMap.put(name, MOVE_NONE);
-					break;
-				case STATUS_LOSE:
-					/*
-					 * This is done AFTER collision has set the status map,
-					 * so that the server can tell any clients that they have 
-					 * lost before they are removed permanently 
-					 */
-					statusMap.remove(p.getName());
-					iter.remove();
-					break;
-				case MOVE_EXIT:
-					// this is reached when the user exits the game
-					iter.remove();
-					break;
-				case STATUS_WIN:
-					break;
-			}
-			
-		}
 	}
 	/*
 	 * Steps the game forward one "tick"
@@ -138,11 +90,7 @@ public class GameLogic implements SnakeInterface {
 	 */
 	private void moveSnakes() {
 		for(Player p : players) {
-			if(statusMap.get(p.getName()) != STATUS_LOSE){
-				if(!p.getSnake().move()) {
-					statusMap.put(p.getName(),STATUS_LOSE);
-				}
-			}
+			
 		}
 	}
 	/*
@@ -164,7 +112,7 @@ public class GameLogic implements SnakeInterface {
 			 * this player will still be checked by other players to 
 			 * see if a collision has happened.
 			 */
-			if(statusMap.get(p.getName()) != STATUS_LOSE) {
+			//if(statusMap.get(p.getName()) != STATUS_LOSE) {
 				for(Player k: players) {
 					if(p != k){					
 						Point k_headPos = k.getSnake().getHeadPos();
@@ -181,14 +129,15 @@ public class GameLogic implements SnakeInterface {
 									if(p_new_pos.equals(k_headPos) && compareDirections(pDir, kDir)) {
 										compareSize(p,k);
 									} else {
-										statusMap.put(p.getName(), STATUS_LOSE);
+										// Make player lose
+										//statusMap.put(p.getName(), STATUS_LOSE);
 									}
 								}		
 							}
 						}
 					}
 				}
-			}
+			//}
 		}
 	}
 	/*
@@ -205,18 +154,15 @@ public class GameLogic implements SnakeInterface {
 			Random r = new Random();
 			switch(r.nextInt(2)) {
 			case 0:
-				statusMap.put(k.getName(), STATUS_LOSE);
+				
 				break;
 			case 1:
-				statusMap.put(p.getName(), STATUS_LOSE);
 				break;
 			}
 		} else if(p_snake_len > k_snake_len) {
 			// if p is greater than k, p wins
-			statusMap.put(k.getName(), STATUS_LOSE);		
 		} else {
 			// Otherwise k must be larger so k wins
-			statusMap.put(p.getName(), STATUS_LOSE);
 		}
 		
 	}
@@ -295,10 +241,6 @@ public class GameLogic implements SnakeInterface {
 			}
 		}
 		return false;
-	}
-
-	public void setStatusMap(Map<String,Integer> statusMap) {
-		this.statusMap = statusMap;
 	}
 	
 	public List<Player> getPlayers() {

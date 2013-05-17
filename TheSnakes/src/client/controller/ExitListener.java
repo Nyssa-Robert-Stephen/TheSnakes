@@ -7,12 +7,12 @@ import java.io.IOException;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import shared.controller.SnakeInterface;
+import shared.controller.SnakeGameInterface;
 
 import client.view.ClientFrame;
 
 //class ensures sockets are closed before closing
-public class ExitListener implements WindowListener, SnakeInterface{
+public class ExitListener implements WindowListener, SnakeGameInterface{
 	ClientFrame cf;
 	public ExitListener(ClientFrame clientFrame) {
 		this.cf = clientFrame;

@@ -5,7 +5,7 @@ import java.awt.event.KeyListener;
 import java.io.IOException;
 import client.view.ClientFrame;
 
-public class MoveListener implements KeyListener, shared.controller.SnakeInterface {
+public class MoveListener implements KeyListener, shared.controller.SnakeGameInterface {
 	
 	ClientFrame client;
 	

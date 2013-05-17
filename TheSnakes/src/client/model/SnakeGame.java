@@ -6,11 +6,11 @@ import java.io.IOException;
 import javax.swing.JOptionPane;
 
 import server.controller.TheServer;
-import shared.controller.SnakeInterface;
+import shared.controller.SnakeGameInterface;
 import shared.model.Packet;
 import client.view.ClientFrame;
 
-public class SnakeGame extends Thread implements SnakeInterface{
+public class SnakeGame extends Thread implements SnakeGameInterface{
 
 	private ClientFrame clientFrame;
 	private Packet info;

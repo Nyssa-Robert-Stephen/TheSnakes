@@ -13,7 +13,7 @@ import client.controller.JoinListener;
 import client.controller.MoveListener;
 import client.view.ClientFrame;
 
-public class JoinPanel extends JPanel implements shared.controller.SnakeInterface{
+public class JoinPanel extends JPanel implements shared.controller.SnakeGameInterface{
 	private JLabel lbl_ip = new JLabel("Enter IP: ");
 	private JLabel lbl_port = new JLabel("Select Port: ");
 	private JTextField text_ip = new JTextField(10);

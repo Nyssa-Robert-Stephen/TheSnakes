@@ -12,7 +12,7 @@ import client.model.SnakeGame;
 import client.model.SocketHandler;
 
 @SuppressWarnings("serial")
-public class ClientFrame extends JFrame implements shared.controller.SnakeInterface
+public class ClientFrame extends JFrame implements shared.controller.SnakeGameInterface
 {
 	
 	/*

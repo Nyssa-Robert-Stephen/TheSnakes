@@ -1,142 +1,41 @@
 package server.controller;
 
 import java.awt.Point;
-import java.io.IOException;
-import java.net.ServerSocket;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
+import java.rmi.RemoteException;
 import java.util.Map;
 
 import server.model.GameLogic;
-import shared.controller.SnakeInterface;
-import shared.model.Player;
+import shared.controller.CallBack;
+import shared.controller.SnakeServer;
 
-public class TheServer implements SnakeInterface, Runnable {
+public class TheServer implements SnakeServer, Runnable {
 	
-	private List<Player> players = new ArrayList<Player>();
-	private List<Thread> clients = new ArrayList<Thread>();
-	private List<ClientListener> clientRunnables = new ArrayList<ClientListener>();
+	
+	private Map<String, CallBack> clientMap;
 	
 	private int numPlayers = 2;
-	private ServerSocket serverSocket;
 	private Point bounds;
 	
-	private Map<String,Integer> statusMap = new HashMap<String,Integer>();
+	private final GameLogic gameLogic;
 	
-	final private GameLogic gameLogic;
-	
-	public TheServer(int numPlayers, Point bounds, int port)
-	{
+	public TheServer(int numPlayers, Point bounds, int port) {
 		this.bounds = bounds;
-		gameLogic = new GameLogic(this.bounds);
+		this.gameLogic = new GameLogic(this.bounds);
 		this.numPlayers = numPlayers;
-		try{
-			serverSocket = new ServerSocket(port);
-			System.out.println("New Snake Server at " + new Date());
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
+		
+		// set up RMI server
+		
 	}
 	@Override
 	public void run() {
-		
-		for (int i=0; i<numPlayers; i++) {
-			
-			ClientListener client;
-			try {				
-				client = new ClientListener(this,serverSocket.accept());
-				System.out.println("New Contestant: ");
-				clients.add(new Thread(client));
-				clientRunnables.add(client);
-				
-				//tell Client the bounds
-				client.sendBounds(bounds);
-				
-				//get position from client
-				String message = client.getIn().readUTF();
-				
-				//Set player's name
-				String playerName = message.substring(0, message.length()-2);
-				System.out.println("Player name: " + playerName);
-				client.setPlayerName(playerName);
-				
-				//Set player's position
-				int position = Integer.parseInt(message.substring(message.length()-2));
-				int status = setPosition(position);
-				if(status==STATUS_NOT_VALID) {
-					client.sendInfo(null,null,status);
-				}
-				
-				Player player = new Player(playerName);
-				player.setPosition(position);
-				players.add(player);
-				System.out.println("Player position: " + position);
-
-				
-				statusMap.put(playerName, status);
-				client.sendInfo(gameLogic.getPlayers(),null, status);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		//Once this loop is complete and there is enough players
-		//The game can begin
-		
-		for(Player p : players)
-            statusMap.put(p.getName(), STATUS_PLAYING);
-		
-		//Start each thread in the array.
-		try{
-			Iterator<Thread> c1 = clients.iterator();
-		while(c1.hasNext() ) {	
-			c1.next().start();
-		}
-		}catch(IllegalThreadStateException e){
-			e.printStackTrace();
-		}
-		
-		//Tell the GameLogic who the players are
-		gameLogic.setPlayers(players);
-		gameLogic.setStatusMap(statusMap);
-		
-		/*
-		 * TODO: need an end condition for this loop
-		 */
 		boolean gameOver = false;
 		while(!gameOver) {
-			// step the game forward one tick
 			gameLogic.step();
 			
-			if(clientRunnables.size() == 1){
-				// a player has won!
-				statusMap.put(clientRunnables.get(0).getPlayerName(),STATUS_WIN);
-				gameOver = true;
+			if(clientMap.size() == 1){
+				// someone has won
 			}
-				
-			
 			// send info to clients
-			Iterator<ClientListener> iter = clientRunnables.iterator();
-			while(iter.hasNext()) {
-				ClientListener client = iter.next();
-				int status = statusMap.get(client.getPlayerName());
-				client.sendInfo(gameLogic.getPlayers(), gameLogic.getFood(),status);
-				// remove them if they have lost
-				if(statusMap.get(client.getPlayerName()) == STATUS_LOSE || 
-						statusMap.get(client.getPlayerName()) == MOVE_EXIT){
-					try {
-						client.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-					iter.remove();
-				}
-			}
 			
 			try {
 				Thread.sleep(75);
@@ -146,31 +45,27 @@ public class TheServer implements SnakeInterface, Runnable {
 		}
 		
 	}
-	/*
-	 * This will set the status of the players, 
-	 * this is called from each ClientListener	
-	 */
-	public void setStatus(int status, String playerName) {
-		statusMap.put(playerName,status);
-	}
 	
-	public int setPosition(int tryPosition)
-	{
-		int status = STATUS_WAIT;
-		
-		for(Player p : players)
-		{
-			if(p.getPosition()==tryPosition)
-				status = STATUS_NOT_VALID;
-		}
-		
-		return status;
+	public int setPosition(int tryPosition) {
+		return 0;
 	}
-	/*
-	 * Main method only used for testing!
-	 */
-	public static void main(String args[])
-	{
-		new TheServer(2,new Point(50,50),1985).run();
+	@Override
+	public void sendMove(String username, int dx, int dy)
+			throws RemoteException {
+		// forward method to GameLogic
+		
 	}
+	@Override
+	public boolean login(String username, String password) throws RemoteException {
+		return false;
+		// forward call to database
+	}
+	@Override
+	public boolean regsiter(String username, String pasword, String firstname,
+			String lastname, String address, String ph_number)
+			throws RemoteException {
+		//forward call to database
+		return false;
+	}
+
 }

@@ -10,7 +10,7 @@ import javax.swing.JPanel;
 import client.controller.CreateListener;
 import client.view.ClientFrame;
 
-public class CreatePanel extends JPanel implements shared.controller.SnakeInterface{
+public class CreatePanel extends JPanel implements shared.controller.SnakeGameInterface{
 	private JLabel lbl_dimensions = new JLabel("Size of grid?");
 	private JComboBox cbx_dimensions = new JComboBox(GRID_SIZES);
 	private JLabel lbl_port = new JLabel("Select Port: ");

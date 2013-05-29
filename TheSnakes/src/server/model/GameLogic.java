@@ -5,7 +5,6 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 import shared.controller.SnakeGameInterface;
@@ -30,8 +29,12 @@ public class GameLogic implements SnakeGameInterface {
 		foodItems = new ArrayList<Food>();
 	}
 	/*
-	 * Give all players a position, color and direction
+	 * Give all players a position, colour and direction
 	 */
+	public void sendMove(String username, int dx, int dy) {
+		
+	}
+	
 	public void setPlayers(List<Player> players) {
 		this.players = players;
 		int dx = 0 , dy = 0;
@@ -64,7 +67,6 @@ public class GameLogic implements SnakeGameInterface {
 					c = COLOR_BOT_RIGHT;
 					break;
 			}
-			
 			Snake snake = new Snake(x,y,c,bounds);
 			snake.setDirection(dx, dy);
 			p.setSnake(snake);
@@ -195,9 +197,6 @@ public class GameLogic implements SnakeGameInterface {
 			}
 		}
 	}
-	
-	
-	
 	/*
 	 * Spawns food at random locations on the board
 	 * Maximum number at any one time is Food.MAX_FOOD 
@@ -224,7 +223,6 @@ public class GameLogic implements SnakeGameInterface {
 					break;
 			}
 			Food food = new Food(x,y,type);
-			
 			foodItems.add(food);
 		}
 	}

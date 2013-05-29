@@ -1,6 +1,8 @@
 package server.controller;
 
 import java.awt.Point;
+import java.net.MalformedURLException;
+import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.util.Map;
 
@@ -10,10 +12,9 @@ import shared.controller.SnakeServer;
 
 public class TheServer implements SnakeServer, Runnable {
 	
-	
 	private Map<String, CallBack> clientMap;
 	
-	private int numPlayers = 2;
+	private int numPlayers;
 	private Point bounds;
 	
 	private final GameLogic gameLogic;
@@ -22,9 +23,17 @@ public class TheServer implements SnakeServer, Runnable {
 		this.bounds = bounds;
 		this.gameLogic = new GameLogic(this.bounds);
 		this.numPlayers = numPlayers;
-		
 		// set up RMI server
-		
+        try {
+			Naming.rebind("//localhost/TheServer", this);
+			// set up database connection
+			
+			
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
 	}
 	@Override
 	public void run() {
@@ -35,8 +44,10 @@ public class TheServer implements SnakeServer, Runnable {
 			if(clientMap.size() == 1){
 				// someone has won
 			}
-			// send info to clients
-			
+			/*
+			 * Send info to clients. Loop through the 
+			 * clientMap and call methods for each CallBack
+			 */
 			try {
 				Thread.sleep(75);
 			} catch (InterruptedException e) {
@@ -52,13 +63,14 @@ public class TheServer implements SnakeServer, Runnable {
 	@Override
 	public void sendMove(String username, int dx, int dy)
 			throws RemoteException {
-		// forward method to GameLogic
+		gameLogic.sendMove(username,dx,dy);
 		
 	}
 	@Override
-	public boolean login(String username, String password) throws RemoteException {
-		return false;
+	public boolean login(String username, String password) 
+			throws RemoteException {
 		// forward call to database
+		return false;
 	}
 	@Override
 	public boolean regsiter(String username, String pasword, String firstname,

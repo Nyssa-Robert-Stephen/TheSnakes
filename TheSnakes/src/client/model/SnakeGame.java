@@ -7,13 +7,11 @@ import javax.swing.JOptionPane;
 
 import server.controller.TheServer;
 import shared.controller.SnakeGameInterface;
-import shared.model.Packet;
 import client.view.ClientFrame;
 
 public class SnakeGame extends Thread implements SnakeGameInterface{
 
 	private ClientFrame clientFrame;
-	private Packet info;
 	private int gameStatus = STATUS_WAIT;
 	
 	public SnakeGame(ClientFrame clientFrame)

@@ -19,10 +19,14 @@ public class TheServer implements SnakeServer, Runnable {
 	
 	private final GameLogic gameLogic;
 	
+	private final DBHandler db = new DBHandler();
+	
 	public TheServer(int numPlayers, Point bounds, int port) {
 		this.bounds = bounds;
 		this.gameLogic = new GameLogic(this.bounds);
 		this.numPlayers = numPlayers;
+		
+		db.openDatabase();
 		// set up RMI server
         try {
 			Naming.rebind("//localhost/TheServer", this);
@@ -54,7 +58,9 @@ public class TheServer implements SnakeServer, Runnable {
 				e.printStackTrace();
 			}
 		}
-		
+		//The Server is "over" at the end of the run method
+		//Safe to close the database
+		db.closeDatabase();
 	}
 	
 	public int setPosition(int tryPosition) {
@@ -67,17 +73,22 @@ public class TheServer implements SnakeServer, Runnable {
 		
 	}
 	@Override
-	public boolean login(String username, String password) 
-			throws RemoteException {
-		// forward call to database
-		return false;
+	public boolean login(String username, String password) throws RemoteException {
+		//checkDatabase() returns a boolean
+		//however it won't work unless you're absolutely certain the server is running on Nyssa's laptop
+		//The Official Home of The Snakes Database
+		//return db.checkDatabase(username, password);
+		return true;
 	}
 	@Override
-	public boolean regsiter(String username, String pasword, String firstname,
+	public boolean regsiter(String username, String password, String firstname,
 			String lastname, String address, String ph_number)
 			throws RemoteException {
-		//forward call to database
-		return false;
+		//inputIntoDatabase() returns a boolean
+		//however it won't work unless you're absolutely certain the server is running on Nyssa's laptop
+		//The Official Home of The Snakes Database
+		//return db.inputIntoDatabase(username, password, firstname, lastname, address, ph_number);
+		return true;
 	}
 
 }

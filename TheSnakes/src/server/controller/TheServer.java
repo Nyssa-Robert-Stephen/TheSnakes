@@ -6,6 +6,7 @@ import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.util.Map;
 
+import server.model.DBHandler;
 import server.model.GameLogic;
 import shared.controller.CallBack;
 import shared.controller.SnakeServer;

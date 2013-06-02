@@ -19,6 +19,8 @@ public class DBHandler {
 			
 			connection = DriverManager.getConnection(url, "root", "");
 			
+			System.out.println("Database opened!");
+			
 			return true;
 		} catch (ClassNotFoundException e) {
 			//e.printStackTrace();
@@ -33,6 +35,8 @@ public class DBHandler {
 	{
 		try {
 			connection.close();
+			
+			System.out.println("Database closed.");
 			
 			return true;
 		} catch (SQLException e) {
@@ -83,10 +87,15 @@ public class DBHandler {
 			String lastname, String address, String ph_number)
 	{
 		try {			
-			PreparedStatement pst = connection.prepareStatement("INSERT INTO players(NAME,PASSWORD) values(?,?)");	
+			PreparedStatement pst = connection.prepareStatement("INSERT INTO players(NAME,PASSWORD,FIRSTNAME,LASTNAME,ADDRESS,PH_NUMBER,SCORE) values(?,?,?,?,?,?,?)");	
 			
 			pst.setString(1, username);
 			pst.setString(2, password);
+			pst.setString(3, firstname);
+			pst.setString(4, lastname);
+			pst.setString(5, address);
+			pst.setString(6, ph_number);
+			pst.setString(7, "0");
 			
 			pst.execute();
 			
@@ -95,6 +104,42 @@ public class DBHandler {
 		catch(SQLException e)
 		{
 			//e.printStackTrace();
+			return false;
+		}
+	}
+	
+	public Boolean updateScore(String name, int score)
+	{
+		try{
+			Statement statement = connection.createStatement();
+			
+			String query1 = "SELECT score FROM players WHERE name = '" + name + "';";
+			
+			ResultSet rs = statement.executeQuery(query1);
+			
+			//System.out.println(rs.getString(newScore));
+			
+			if(rs.next())
+			{
+				String result = rs.getString(1);
+				int prevScore = Integer.parseInt(result);
+				int newScore = prevScore + score;
+				
+				System.out.println(newScore);
+				
+				String query2 = "UPDATE players SET score=" + newScore + " WHERE name='" + name + "';";
+				
+				statement.executeUpdate(query2);
+				
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		catch(SQLException e){
+			e.printStackTrace();
 			return false;
 		}
 	}

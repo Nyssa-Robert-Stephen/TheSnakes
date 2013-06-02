@@ -12,12 +12,23 @@ public class Player implements Serializable {
 	private int score;
 	private Color color;
 	
+	private boolean isDead;
+	
 	public String toString() {
 		return name + " | " + snake;
 	}
 	
+	public void kill() {
+		isDead = true;
+	}
+	
+	public boolean isDead() {
+		return isDead;
+	}
+	
 	public Player(String name){
 		this.name = name;
+		this.isDead = false;
 	}
 	public String getName() {
 		return name;

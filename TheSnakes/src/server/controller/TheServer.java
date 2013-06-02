@@ -4,12 +4,14 @@ import java.awt.Point;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
+import java.util.List;
 import java.util.Map;
 
 import server.model.DBHandler;
 import server.model.GameLogic;
 import shared.controller.CallBack;
 import shared.controller.SnakeServer;
+import shared.model.Player;
 
 public class TheServer implements SnakeServer, Runnable {
 	
@@ -45,6 +47,13 @@ public class TheServer implements SnakeServer, Runnable {
 		boolean gameOver = false;
 		while(!gameOver) {
 			gameLogic.step();
+			
+			List<Player> players = gameLogic.getPlayers();
+			for(Player p: players){
+				if(p.isDead()){
+					// send them a message saying they have lost.
+				}
+			}
 			
 			if(clientMap.size() == 1){
 				// someone has won

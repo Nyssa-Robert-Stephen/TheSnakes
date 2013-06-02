@@ -254,10 +254,10 @@ public class GameLogic implements SnakeGameInterface {
 					 */
 					p.getSnake().growSnake(item.getGrowLevel());
 					/*
-					 * In here you would call a method that modifies the players score
-					 * maybe based on the item's grow level too (so if they eat 
-					 * something which has a higher growth level they get more score)
+					 * 
+					 * Calculates score based on the item's grow level
 					 */
+					p.calculateScore(item.getGrowLevel());
 					/*
 					 * remove the food item 
 					 */

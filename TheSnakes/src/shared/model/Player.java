@@ -48,6 +48,9 @@ public class Player implements Serializable {
 	public void setScore(int score) {
 		this.score = score;
 	}
+	public void calculateScore(int s) {
+		this.score = score + s;
+	}
 	public int getPosition() {
 		return position;
 	}

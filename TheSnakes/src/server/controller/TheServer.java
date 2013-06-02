@@ -52,11 +52,37 @@ public class TheServer implements SnakeServer, Runnable {
 			for(Player p: players){
 				if(p.isDead()){
 					// send them a message saying they have lost.
+					
+					//Calculating a Player's Score
+					//Get username to identify them in database
+					String name = p.getName();
+					/*
+					 * A player's score is determined by how much food they ate
+					 * multiplied by their ranking in the game.
+					 * As the isDead() call removes them from the player map
+					 * The player map is an ideal way to find their ranking.
+					 */
+					int ranking = 4 - gameLogic.getPlayers().size();
+					int foodIntake = p.getScore();
+					int score = ranking * foodIntake;
+					
+					//Update their score in the database
+					db.updateScore(name, score);
 				}
 			}
 			
 			if(clientMap.size() == 1){
 				// someone has won
+				
+				//There should only be one player in this map by now
+				for(Player p: players)
+				{
+					String name = p.getName();
+					int foodIntake = p.getScore();
+					int score = 4 * foodIntake;
+					
+					db.updateScore(name, score);
+				}
 			}
 			/*
 			 * Send info to clients. Loop through the 

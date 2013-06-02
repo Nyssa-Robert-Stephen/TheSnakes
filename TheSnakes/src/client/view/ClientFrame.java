@@ -2,6 +2,7 @@ package client.view;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.rmi.RemoteException;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -15,23 +16,18 @@ import client.model.SocketHandler;
 public class ClientFrame extends JFrame implements shared.controller.SnakeGameInterface
 {
 	
-	/*
-	 * This is just a test class I made for drawing the snake to see that it works
-	 * I imagine we would have similar methods like run(), gameInit() and gameLoop() somewhere on the server
-	 */
+		private SnakeGame snakeGame;
 		private boolean join = false;
 		private boolean create = false;
 		private int windowWidth = 1250;
 		private int windowHeight = 500;
-		private SocketHandler sockHandler = new SocketHandler();
-		private Grid grid; //= new Grid(50, 50);
-		//private ControlBox cb = new ControlBox(this);
-		///private StatusPanel sp = new StatusPanel(this);
+		private Grid grid; 
 		private RightSideBar rsb = new RightSideBar(this);
 		private LeftSideBar lsb = new LeftSideBar(this);
 		private JPanel empty1 = new JPanel();
 		private JPanel empty2= new JPanel();
 		
+
 		public ClientFrame() {
 			this.addWindowListener(new ExitListener(this));
 			this.setLayout(new GridLayout(1,3));
@@ -56,15 +52,11 @@ public class ClientFrame extends JFrame implements shared.controller.SnakeGameIn
 	        //this.createBufferStrategy(2);
 		}
 
-		
+
+
 		public Grid getGrid() {
 			return grid;
 		}
-
-		public SocketHandler getSockHandler() {
-			return sockHandler;
-		}
-		
 		
 		public boolean isCreate() {
 			return create;
@@ -73,11 +65,6 @@ public class ClientFrame extends JFrame implements shared.controller.SnakeGameIn
 
 		public void setCreate(boolean create) {
 			this.create = create;
-		}
-
-
-		public static void main(String args[]){
-			new SnakeGame(new ClientFrame());
 		}
 
 
@@ -108,5 +95,26 @@ public class ClientFrame extends JFrame implements shared.controller.SnakeGameIn
 
 		public StatusPanel getSp() {
 			return rsb.getSp();
+		}
+
+
+
+		public SnakeGame getSnakeGame() {
+			return snakeGame;
+		}
+		public static void main(String args[]){
+			try {
+				SnakeGame s = new SnakeGame(new ClientFrame());
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+
+
+		public void setSnakeGame(SnakeGame sg) {
+			this.snakeGame = sg;
+			
 		}
 }

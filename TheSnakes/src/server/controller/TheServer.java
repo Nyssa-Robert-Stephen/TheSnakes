@@ -126,5 +126,12 @@ public class TheServer implements SnakeServer, Runnable {
 		//return db.inputIntoDatabase(username, password, firstname, lastname, address, ph_number);
 		return true;
 	}
+	@Override
+	public void addPlayer(String name, CallBack cb) throws RemoteException {
+		/*
+		 * Add player to the callback
+		 */
+		
+	}
 
 }

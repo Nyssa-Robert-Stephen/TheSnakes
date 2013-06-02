@@ -7,7 +7,7 @@ import java.rmi.RemoteException;
 public interface SnakeServer extends java.rmi.Remote {
 
 	public void sendMove(String username, int dx, int dy) throws RemoteException;
-	
+	public void addPlayer(String name, CallBack cb)throws RemoteException;
 	public boolean login(String username, String password) throws RemoteException;
 	
 	public boolean regsiter(String username, String pasword, 

@@ -33,13 +33,13 @@ public class ExitListener implements WindowListener, SnakeGameInterface{
 	public void windowClosing(WindowEvent arg0) {
 		int confirm = JOptionPane.showOptionDialog(cf, "Are You Sure to Close Application?", "Exit Confirmation", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
         if (confirm == 0) {
-        	if(cf.isJoin()) {
-        		try {
-        			cf.getSockHandler().sendMove(MOVE_EXIT);
-        		} catch (IOException e1) {
-        			e1.printStackTrace();
-        		}
-        	}
+//        	if(cf.isJoin()) {
+//        		try {
+//
+//        		} catch (IOException e1) {
+//        			e1.printStackTrace();
+//        		}
+//        	}
         	
         	cf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         }

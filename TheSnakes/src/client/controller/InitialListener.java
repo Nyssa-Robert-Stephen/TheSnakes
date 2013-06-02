@@ -18,7 +18,8 @@ public class InitialListener implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		if(!ip.getPlayerName().isEmpty() && ip.getPlayerName().matches("[a-zA-Z]+")){
-		
+			System.out.println(arg0.getActionCommand());
+			System.out.println(ip.getRegister().getText());
 		if(arg0.getActionCommand() == ip.getJoin().getText()){
 			lsb.setPName(ip.getPlayerName());
 			lsb.setJoinPanel();
@@ -29,6 +30,19 @@ public class InitialListener implements ActionListener {
 			lsb.setPName(ip.getPlayerName());
 			lsb.setCreatePanel();
 			ip.disableAll();
+		}
+
+		else if(arg0.getActionCommand() == ip.getLogin().getText()){
+			lsb.setPName(ip.getPlayerName());
+			lsb.setLoginPanel();
+			ip.disableAll();
+			
+		}
+		else if(arg0.getActionCommand() == ip.getRegister().getText()){
+			lsb.setPName(ip.getPlayerName());
+			lsb.setRegisterPanel();
+			ip.disableAll();
+			
 		}
 		else
 			System.out.println("No button?!");

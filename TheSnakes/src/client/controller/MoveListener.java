@@ -3,15 +3,17 @@ package client.controller;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
+
+import client.model.SnakeGame;
 import client.view.ClientFrame;
 
 public class MoveListener implements KeyListener, shared.controller.SnakeGameInterface {
 	
-	ClientFrame client;
+	SnakeGame snakeGame;
 	
-	public MoveListener(ClientFrame client)
+	public MoveListener(ClientFrame cf)
 	{
-		this.client = client;
+		this.snakeGame = cf.getSnakeGame();	
 	}
 
 	@Override
@@ -20,16 +22,16 @@ public class MoveListener implements KeyListener, shared.controller.SnakeGameInt
 		 try{
 			 switch(key) {
 			 	case KeyEvent.VK_LEFT:
-			 		client.getSockHandler().sendMove(MOVE_LEFT);
+			 		snakeGame.getTheServer().sendMove(snakeGame.getClientFrame().getName(),1,1);
 			 		break;
 			 	case KeyEvent.VK_UP:
-			 		client.getSockHandler().sendMove(MOVE_FASTER);
+			 		snakeGame.getTheServer().sendMove(snakeGame.getClientFrame().getName(),1,1);
 			 		break;
 			 	case KeyEvent.VK_RIGHT:
-			 		client.getSockHandler().sendMove(MOVE_RIGHT);
+			 		snakeGame.getTheServer().sendMove(snakeGame.getClientFrame().getName(),1,1);
 			 		break;
 			 	case KeyEvent.VK_DOWN:
-			 		client.getSockHandler().sendMove(MOVE_SLOWER);
+			 		snakeGame.getTheServer().sendMove(snakeGame.getClientFrame().getName(),1,1);
 			 		break;
 			 }
 		 }catch(IOException ex){

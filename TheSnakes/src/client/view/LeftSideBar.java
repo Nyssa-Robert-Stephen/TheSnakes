@@ -8,12 +8,16 @@ import javax.swing.JPanel;
 import client.view.LeftSideBarPackage.CreatePanel;
 import client.view.LeftSideBarPackage.InitialPanel;
 import client.view.LeftSideBarPackage.JoinPanel;
+import client.view.LeftSideBarPackage.LoginPanel;
+import client.view.LeftSideBarPackage.RegisterPanel;
 
 public class LeftSideBar extends JPanel{
 	private ClientFrame cf;
 	private InitialPanel ip = new InitialPanel(this);
 	private CreatePanel cp;
 	private JoinPanel jp; 
+	private RegisterPanel rp;
+	private LoginPanel lp;
 	
 	private String p_name;
 	private int dimensions;
@@ -22,17 +26,26 @@ public class LeftSideBar extends JPanel{
 	private int join_port;
 	private String ip_address;
 	private int position;
+	
 		public LeftSideBar(ClientFrame clientFrame)
 		{
 			this.cf = clientFrame;
 			jp = new JoinPanel(cf);
 			cp = new CreatePanel(cf);
-			this.setLayout(new GridLayout(5,1));
+			rp = new RegisterPanel(cf);
+			lp = new LoginPanel(cf);
+
 			this.add(ip);
 			this.add(cp);
 			this.add(jp);
+			this.add(lp);
+			this.add(rp);
+			this.setLayout(new GridLayout(5,1));
+			
 			cp.setVisible(false);
 			jp.setVisible(false);
+			lp.setVisible(false);
+			rp.setVisible(false);
 			this.setSize(30, 300);
 		}
 		public void setJoinPanel()
@@ -44,6 +57,14 @@ public class LeftSideBar extends JPanel{
 		{
 			cp.setVisible(true);
 		}
+		public void setLoginPanel() {
+			lp.setVisible(true);
+			
+		}
+		public void setRegisterPanel(){
+			rp.setVisible(true);
+		}
+		
 		public InitialPanel getIp() {
 			// TODO Auto-generated method stub
 			return ip;
@@ -97,8 +118,7 @@ public class LeftSideBar extends JPanel{
 		public void setPosition(int object) {
 			this.position = object;
 		}
-		
-		
+
 
 
 }

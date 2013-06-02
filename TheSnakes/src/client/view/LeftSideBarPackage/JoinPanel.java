@@ -11,6 +11,7 @@ import javax.swing.JTextField;
 
 import client.controller.JoinListener;
 import client.controller.MoveListener;
+import client.model.SnakeGame;
 import client.view.ClientFrame;
 
 public class JoinPanel extends JPanel implements shared.controller.SnakeGameInterface{
@@ -23,9 +24,9 @@ public class JoinPanel extends JPanel implements shared.controller.SnakeGameInte
 	private JLabel lbl_pos = new JLabel("Pick a position:");
 	private JComboBox cbx_pos = new JComboBox(POSITIONS);
 	private ClientFrame cf;
-	public JoinPanel(ClientFrame cf)
+	public JoinPanel(ClientFrame cf2)
 	{
-		this.cf = cf;
+		this.cf = cf2;
 		this.setLayout(new FlowLayout());
 		text_ip.setText("localhost");
 		this.add(lbl_ip);
@@ -37,7 +38,7 @@ public class JoinPanel extends JPanel implements shared.controller.SnakeGameInte
 		this.add(lbl_join);
 		this.add(join);
 		join.addActionListener(new JoinListener(this));
-		join.addKeyListener(new MoveListener(cf));
+		join.addKeyListener(new MoveListener(cf2));
 		this.setLayout(new GridLayout(5,2));
 	}
 	public JTextField getIp() {

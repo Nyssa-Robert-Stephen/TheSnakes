@@ -18,9 +18,11 @@ public class JoinListener implements ActionListener{
 		jp.getClientFrame().getLSB().setJoinPort(Integer.parseInt(jp.getCbx_port().getSelectedItem().toString()));
 		jp.getClientFrame().getLSB().setPosition(Integer.parseInt(jp.getCbx_pos().getSelectedItem().toString()));
 		jp.getClientFrame().getLSB().setIp_address(jp.getIp().getText());
+		
+		if(jp.getClientFrame().getSnakeGame().JoinServer()){
 		jp.disableAll();
-		jp.getClientFrame().setJoin(true);
 		jp.getClientFrame().getSp().setLbl_curPlayer(jp.getClientFrame().getLSB().getPName());
+		}
 			}
 	}
 

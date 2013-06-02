@@ -22,6 +22,7 @@ public class InitialListener implements ActionListener {
 			System.out.println(ip.getRegister().getText());
 		if(arg0.getActionCommand() == ip.getJoin().getText()){
 			lsb.setPName(ip.getPlayerName());
+			lsb.getCf().setName(ip.getName());
 			lsb.setJoinPanel();
 			ip.disableAll();
 
@@ -47,7 +48,7 @@ public class InitialListener implements ActionListener {
 		else
 			System.out.println("No button?!");
 		}
-		System.out.println("invalid name.");
+
 
 	}
 

@@ -118,6 +118,9 @@ public class LeftSideBar extends JPanel{
 		public void setPosition(int object) {
 			this.position = object;
 		}
+		public ClientFrame getCf() {
+			return cf;
+		}
 
 
 

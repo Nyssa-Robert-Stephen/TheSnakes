@@ -7,6 +7,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import client.controller.LoginListener;
 import client.view.ClientFrame;
 
 public class LoginPanel extends JPanel{
@@ -29,9 +30,26 @@ public class LoginPanel extends JPanel{
 		this.add(txt_pwd);
 		this.add(btn_ok);
 		this.add(btn_cancel);
+		btn_ok.addActionListener(new LoginListener(this));
 		
 		this.setLayout(new GridLayout(5,4));
 		
 		
 	}
+
+
+	public JTextField getTxt_uname() {
+		return txt_uname;
+	}
+
+
+	public JTextField getTxt_pwd() {
+		return txt_pwd;
+	}
+
+
+	public ClientFrame getCf() {
+		return cf;
+	}
+	
 }

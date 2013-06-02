@@ -9,23 +9,26 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 
 import server.controller.TheServer;
+import shared.controller.CallBack;
 import shared.controller.SnakeServer;
 import shared.model.Player;
+import client.controller.CallBackImp;
 import client.view.ClientFrame;
 
 public class SnakeGame extends UnicastRemoteObject{
 
 	private ClientFrame clientFrame;
 	private SnakeServer theServer;
-	
+	private CallBack cb= new CallBackImp(this);
 	public SnakeGame(ClientFrame cf ) throws RemoteException
 	{
 		this.setClientFrame(cf);
 		cf.setSnakeGame(this);
+
 		//RMI join server stuff goes here.
 	
 	}
-	private void createGame(){
+	private void createGame() throws RemoteException{
 
 			System.out.println("starting..");
 
@@ -62,13 +65,8 @@ public class SnakeGame extends UnicastRemoteObject{
 
 	}
 
-	public void CreateServer(int players, Point bounds,int port) throws AlreadyBoundException{
-		try {
-			Runnable server = new TheServer(players, bounds, port);
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public void CreateServer(int players, Point bounds,int port) throws AlreadyBoundException, RemoteException{
+		TheServer server = new TheServer(players, bounds, port);
 		
 	}
 
@@ -88,7 +86,7 @@ public class SnakeGame extends UnicastRemoteObject{
 	public boolean Register(String username, String pasword, 
 			String firstname, String lastname, String address, String ph_number){
 			try {
-				theServer.regsiter("test", "test", "test", "test", "test", "111");
+				theServer.regsiter(username, pasword, firstname, lastname, address, ph_number);
 			} catch (RemoteException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -96,12 +94,15 @@ public class SnakeGame extends UnicastRemoteObject{
 		return true;
 	}
 	
-	public boolean JoinServer() {
+	public boolean JoinServer(String name, int pos) {
 		try{
-		theServer  = (SnakeServer) Naming.lookup("localhost/TheServer");
+		theServer  = (SnakeServer) Naming.lookup("//localhost/SnakeServer");
+		System.out.println("Succeded");
+		theServer.addPlayer(name, cb,pos);
+
 		}
 		catch(Exception e){
-			return false;
+			e.printStackTrace();
 		}
 				return true;
 		

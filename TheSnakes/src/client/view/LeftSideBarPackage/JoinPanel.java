@@ -55,9 +55,9 @@ public class JoinPanel extends JPanel implements shared.controller.SnakeGameInte
 		return cf;
 	}
 	public void disableAll() {
-		//text_ip.setEnabled(false);
-		//cbx_port.setEnabled(false);
-	//	cbx_pos.setEnabled(false);
+		text_ip.setEnabled(false);
+		cbx_port.setEnabled(false);
+		cbx_pos.setEnabled(false);
 		
 	}
 	

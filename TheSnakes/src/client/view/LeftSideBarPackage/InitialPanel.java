@@ -63,6 +63,7 @@ public class InitialPanel extends JPanel{
 		return btn_register;
 	}
 
+
 	public void disableAll(){
 		btn_join.setEnabled(false);
 		btn_create.setEnabled(false);

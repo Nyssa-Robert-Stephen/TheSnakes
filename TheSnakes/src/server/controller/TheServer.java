@@ -5,6 +5,8 @@ import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,13 +20,13 @@ import shared.model.Player;
 public class TheServer extends UnicastRemoteObject
 							implements SnakeServer, Runnable {
 	
-	private Map<String, CallBack> clientMap;
+	private Map<String, CallBack> clientMap = new HashMap();
 	
 	private int numPlayers;
 	private int curr_num_players = 0;
 	private Point bounds;
 	private boolean running = false;
-	
+	private int pos[] = {0,0,0,0};
 	
 	private transient final GameLogic gameLogic;
 	
@@ -50,12 +52,22 @@ public class TheServer extends UnicastRemoteObject
 	}
 	@Override
 	public void run() {
+		int i = 0;
 		while(running) {
+			List<Player> new_players = new ArrayList<Player>();
+			                       
+			                       for(String name : clientMap.keySet()) {
+			                    	  Player p = new Player(name);
+			                    	  p.setPosition(pos[i]);
+			                               new_players.add(p);
+			                               i++;
+			                       }
+			                       gameLogic.setPlayers(new_players);
 			boolean gameOver = false;
 			while(!gameOver) {
 				gameLogic.step();	
 				try {
-					
+					System.out.println("In the game");
 					List<Player> players = gameLogic.getPlayers();
 					for(Player p: players){
 						if(p.isDead()){
@@ -149,21 +161,29 @@ public class TheServer extends UnicastRemoteObject
 		return true;
 	}
 	@Override
-	public void addPlayer(String name, CallBack cb) throws RemoteException {
+	public boolean addPlayer(String name, CallBack cb, int position) throws RemoteException {
 		/*
 		 * Add player to the callback
 		 */
 		if(curr_num_players == numPlayers) {
+			return false;
 			/*
 			 * Send a message to the client that there is no more room 
 			 * (game is underway)
 			 */
 		} else {
+			System.out.println("Added: " + name);
+			pos[curr_num_players++] = position;
 			clientMap.put(name, cb);
-			curr_num_players++;
+			cb.setGridSize(bounds);
 			if(curr_num_players == numPlayers) {
+				Thread s= new Thread(this);
+				s.start();
+				System.out.println("Starting..");
 				running = true;
+				
 			}
+			return true;
 		}
 	}
 

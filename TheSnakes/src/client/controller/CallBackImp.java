@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
+import client.model.SnakeGame;
 import client.view.ClientFrame;
 
 import shared.controller.CallBack;
@@ -17,44 +18,45 @@ import shared.model.Player;
 @SuppressWarnings("serial")
 public class CallBackImp extends UnicastRemoteObject implements CallBack,SnakeGameInterface{
 
-	ClientFrame clientFrame;
+	SnakeGame snakeGame;
 	
-	public CallBackImp(ClientFrame  cf) throws RemoteException{
-		this.clientFrame = cf;
+	public CallBackImp(SnakeGame  snakeGame) throws RemoteException{
+		this.snakeGame = snakeGame;
 	}
 	@Override
 	public void sendGameState(List<Player> players) throws RemoteException {
 
 		for(int i=0; i<players.size(); i++)
 		{
-			clientFrame.getGrid().addSnake(players.get(i).getSnake().getSegments());
+			snakeGame.getClientFrame().getGrid().addSnake(players.get(i).getSnake().getSegments());
 		}
-		clientFrame.repaint();
+		snakeGame.getClientFrame().repaint();
+		
 
 		
 	}
 
 	@Override
 	public void sendFood(List<Food> food) throws RemoteException {
-		clientFrame.getGrid().addFood(food);
+		snakeGame.getClientFrame().getGrid().addFood(food);
 	}
 
 	@Override
 	public void sendPlayerStatus(int state) throws RemoteException {
 		switch(state){
 		case STATUS_LOSE:
-			JOptionPane.showMessageDialog(clientFrame, "You have lost.");
-			clientFrame.getSp().setLbl_Status("LOST!!");
+			JOptionPane.showMessageDialog(snakeGame.getClientFrame(), "You have lost.");
+			snakeGame.getClientFrame().getSp().setLbl_Status("LOST!!");
 			break;
 		case STATUS_WIN:
-			JOptionPane.showMessageDialog(clientFrame, "You have won.");
-			clientFrame.getSp().setLbl_Status("WINNER!");
+			JOptionPane.showMessageDialog(snakeGame.getClientFrame(), "You have won.");
+			snakeGame.getClientFrame().getSp().setLbl_Status("WINNER!");
 			break;
 		case STATUS_WAIT:
-			clientFrame.getSp().setLbl_Status("Waiting..");
+			snakeGame.getClientFrame().getSp().setLbl_Status("Waiting..");
 			break;
 		case STATUS_PLAYING:
-			clientFrame.getSp().setLbl_Status("Playing!");
+			snakeGame.getClientFrame().getSp().setLbl_Status("Playing!");
 			break;
 		}
 		
@@ -62,7 +64,7 @@ public class CallBackImp extends UnicastRemoteObject implements CallBack,SnakeGa
 
 	@Override
 	public void setGridSize(Point p) throws RemoteException {
-		clientFrame.setGrid(p.x, p.y);
+		snakeGame.getClientFrame().setGrid(p.x, p.y);
 		
 	}
 

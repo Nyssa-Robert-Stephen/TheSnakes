@@ -4,27 +4,33 @@ import java.awt.Point;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 import java.util.Map;
 
 import server.model.DBHandler;
 import server.model.GameLogic;
 import shared.controller.CallBack;
+import shared.controller.SnakeGameInterface;
 import shared.controller.SnakeServer;
 import shared.model.Player;
 
-public class TheServer implements SnakeServer, Runnable {
+public class TheServer extends UnicastRemoteObject
+							implements SnakeServer, Runnable {
 	
 	private Map<String, CallBack> clientMap;
 	
 	private int numPlayers;
+	private int curr_num_players = 0;
 	private Point bounds;
+	private boolean running = false;
 	
-	private final GameLogic gameLogic;
 	
-	private final DBHandler db = new DBHandler();
+	private transient final GameLogic gameLogic;
 	
-	public TheServer(int numPlayers, Point bounds, int port) {
+	private transient final DBHandler db = new DBHandler();
+	
+	public TheServer(int numPlayers, Point bounds, int port) throws RemoteException {
 		this.bounds = bounds;
 		this.gameLogic = new GameLogic(this.bounds);
 		this.numPlayers = numPlayers;
@@ -32,7 +38,7 @@ public class TheServer implements SnakeServer, Runnable {
 		db.openDatabase();
 		// set up RMI server
         try {
-			Naming.rebind("//localhost/TheServer", this);
+			Naming.rebind("//localhost/SnakeServer", this);
 			// set up database connection
 			
 			
@@ -44,59 +50,75 @@ public class TheServer implements SnakeServer, Runnable {
 	}
 	@Override
 	public void run() {
-		boolean gameOver = false;
-		while(!gameOver) {
-			gameLogic.step();
-			
-			List<Player> players = gameLogic.getPlayers();
-			for(Player p: players){
-				if(p.isDead()){
-					// send them a message saying they have lost.
+		while(running) {
+			boolean gameOver = false;
+			while(!gameOver) {
+				gameLogic.step();	
+				try {
 					
-					//Calculating a Player's Score
-					//Get username to identify them in database
-					String name = p.getName();
+					List<Player> players = gameLogic.getPlayers();
+					for(Player p: players){
+						if(p.isDead()){
+							//Get username to identify them in database
+							String name = p.getName();
+							// send them a message saying they have lost.
+							CallBack cb = clientMap.get(name);
+							cb.sendPlayerStatus(SnakeGameInterface.STATUS_LOSE);
+							clientMap.remove(name);
+							//Calculating a Player's Score		
+							/*
+							 * A player's score is determined by how much food they ate
+							 * multiplied by their ranking in the game.
+							 * As the isDead() call removes them from the player map
+							 * The player map is an ideal way to find their ranking.
+							 */
+							int ranking = 4 - gameLogic.getPlayers().size();
+							int foodIntake = p.getScore();
+							int score = ranking * foodIntake;
+							
+							//Update their score in the database
+							db.updateScore(name, score);
+						}
+					}
+					
+					if(clientMap.size() == 1){
+						// someone has won
+						gameOver = true;
+						running = false;
+						//There should only be one player in this map by now
+						for(Player p: players)
+						{
+							String name = p.getName();
+							CallBack cb = clientMap.get(name);
+							cb.sendPlayerStatus(SnakeGameInterface.STATUS_WIN);
+							int foodIntake = p.getScore();
+							int score = 4 * foodIntake;
+							
+							db.updateScore(name, score);
+						}
+					}
 					/*
-					 * A player's score is determined by how much food they ate
-					 * multiplied by their ranking in the game.
-					 * As the isDead() call removes them from the player map
-					 * The player map is an ideal way to find their ranking.
+					 * Send info to clients. Loop through the 
+					 * clientMap and call methods for each CallBack
 					 */
-					int ranking = 4 - gameLogic.getPlayers().size();
-					int foodIntake = p.getScore();
-					int score = ranking * foodIntake;
+					for(CallBack cb : clientMap.values()) {
+						cb.sendFood(gameLogic.getFood());
+						cb.sendGameState(players);
+					}
 					
-					//Update their score in the database
-					db.updateScore(name, score);
+					try {
+						Thread.sleep(75);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				} catch(RemoteException e) {
+					
 				}
 			}
-			
-			if(clientMap.size() == 1){
-				// someone has won
-				
-				//There should only be one player in this map by now
-				for(Player p: players)
-				{
-					String name = p.getName();
-					int foodIntake = p.getScore();
-					int score = 4 * foodIntake;
-					
-					db.updateScore(name, score);
-				}
-			}
-			/*
-			 * Send info to clients. Loop through the 
-			 * clientMap and call methods for each CallBack
-			 */
-			try {
-				Thread.sleep(75);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+			//The Server is "over" at the end of the run method
+			//Safe to close the database
+			db.closeDatabase();
 		}
-		//The Server is "over" at the end of the run method
-		//Safe to close the database
-		db.closeDatabase();
 	}
 	
 	public int setPosition(int tryPosition) {
@@ -131,7 +153,18 @@ public class TheServer implements SnakeServer, Runnable {
 		/*
 		 * Add player to the callback
 		 */
-		
+		if(curr_num_players == numPlayers) {
+			/*
+			 * Send a message to the client that there is no more room 
+			 * (game is underway)
+			 */
+		} else {
+			clientMap.put(name, cb);
+			curr_num_players++;
+			if(curr_num_players == numPlayers) {
+				running = true;
+			}
+		}
 	}
 
 }

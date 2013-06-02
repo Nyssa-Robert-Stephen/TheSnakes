@@ -2,10 +2,10 @@ package client.model;
 
 import java.awt.Point;
 import java.io.IOException;
+import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
-
 
 import server.controller.TheServer;
 import shared.controller.SnakeServer;
@@ -58,7 +58,7 @@ public class SnakeGame extends UnicastRemoteObject{
 
 	public void CreateServer(int players, Point bounds,int port){
 		Runnable server = new TheServer(players, bounds, port);
-		new Thread(server).start();
+		
 	}
 
 	public ClientFrame getClientFrame() {
@@ -74,13 +74,24 @@ public class SnakeGame extends UnicastRemoteObject{
 	}
 
 	
-	public boolean Register(){
-		
+	public boolean Register(String username, String pasword, 
+			String firstname, String lastname, String address, String ph_number){
+			try {
+				theServer.regsiter("test", "test", "test", "test", "test", "111");
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		return true;
 	}
 	
 	public boolean JoinServer() {
-		//if(theServer.Join())
+		try{
+		theServer  = (SnakeServer) Naming.lookup("rmi://localhost:1099/TheServer");
+		}
+		catch(Exception e){
+			return false;
+		}
 				return true;
 		
 	}

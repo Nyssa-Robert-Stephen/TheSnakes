@@ -17,7 +17,12 @@ public class RegisterListener implements ActionListener {
 		//ensure all register stuff is filled
 		if(true){
 			System.out.println("Register");
-			if(rp.getCf().getSnakeGame().Register())
+			if(rp.getTxt_address().getText() != null && rp.getTxt_fname().getText() != null &&
+					rp.getTxt_lname().getText() != null	&& rp.getTxt_uname().getText() != null 
+					&& rp.getTxt_pwd().getText() != null && rp.getTxt_phoneno().getText() != null)
+			if(rp.getCf().getSnakeGame().Register(rp.getTxt_uname().getText(),rp.getTxt_pwd().getText()
+					,rp.getTxt_fname().getText(),rp.getTxt_lname().getText()
+					,rp.getTxt_address().getText(),rp.getTxt_phoneno().getText()))
 				System.out.println("Success!");
 		}
 	}

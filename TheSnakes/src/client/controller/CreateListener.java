@@ -1,5 +1,6 @@
 package client.controller;
 
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -20,6 +21,7 @@ public class CreateListener implements ActionListener {
 
 		cp.setDisabled();
 		cp.getClientFrame().getLSB().getJp().setVisible(true);
+		cp.getClientFrame().getSnakeGame().CreateServer(4, new Point(50,50), 11985);
 		cp.getClientFrame().setCreate(true);
 
 		//cb.getClientFrame().

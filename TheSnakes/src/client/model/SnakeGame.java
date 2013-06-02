@@ -2,6 +2,7 @@ package client.model;
 
 import java.awt.Point;
 import java.io.IOException;
+import java.rmi.AlreadyBoundException;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -30,7 +31,12 @@ public class SnakeGame extends UnicastRemoteObject{
 
 			Point p = new Point(getClientFrame().getLSB().getDimensions(),getClientFrame().getLSB().getDimensions());
 			
-			CreateServer(getClientFrame().getLSB().getPlayers(),p,getClientFrame().getLSB().getHostPort());
+			try {
+				CreateServer(getClientFrame().getLSB().getPlayers(),p,getClientFrame().getLSB().getHostPort());
+			} catch (AlreadyBoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 				System.out.println("created");
 	}
 
@@ -56,8 +62,13 @@ public class SnakeGame extends UnicastRemoteObject{
 
 	}
 
-	public void CreateServer(int players, Point bounds,int port){
-		Runnable server = new TheServer(players, bounds, port);
+	public void CreateServer(int players, Point bounds,int port) throws AlreadyBoundException{
+		try {
+			Runnable server = new TheServer(players, bounds, port);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 
@@ -87,7 +98,7 @@ public class SnakeGame extends UnicastRemoteObject{
 	
 	public boolean JoinServer() {
 		try{
-		theServer  = (SnakeServer) Naming.lookup("rmi://localhost:1099/TheServer");
+		theServer  = (SnakeServer) Naming.lookup("localhost/TheServer");
 		}
 		catch(Exception e){
 			return false;

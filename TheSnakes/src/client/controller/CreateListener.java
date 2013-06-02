@@ -3,6 +3,7 @@ package client.controller;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.AlreadyBoundException;
 
 import client.view.LeftSideBarPackage.CreatePanel;
 
@@ -21,7 +22,12 @@ public class CreateListener implements ActionListener {
 
 		cp.setDisabled();
 		cp.getClientFrame().getLSB().getJp().setVisible(true);
-		cp.getClientFrame().getSnakeGame().CreateServer(4, new Point(50,50), 11985);
+		try {
+			cp.getClientFrame().getSnakeGame().CreateServer(4, new Point(50,50), 11985);
+		} catch (AlreadyBoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		cp.getClientFrame().setCreate(true);
 
 		//cb.getClientFrame().

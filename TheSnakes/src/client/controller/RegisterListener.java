@@ -27,6 +27,7 @@ public class RegisterListener implements ActionListener {
 				System.out.println("Success!");
 				rp.getCf().getLSB().getIp().getLogin().setEnabled(false);
 				rp.getCf().getLSB().getIp().getRegister().setEnabled(false);
+				rp.getBtn_ok().addKeyListener(new MoveListener(rp.getCf()));
 			}
 		}
 	}

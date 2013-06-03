@@ -49,7 +49,9 @@ public class RegisterPanel extends JPanel{
 		this.setLayout(new GridLayout(5,2));
 		
 	}
-
+	public JButton getBtn_ok(){
+		return btn_ok;
+	}
 	public ClientFrame getCf() {
 		return cf;
 	}

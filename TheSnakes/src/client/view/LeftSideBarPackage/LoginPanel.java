@@ -51,5 +51,10 @@ public class LoginPanel extends JPanel{
 	public ClientFrame getCf() {
 		return cf;
 	}
+
+
+	public JButton getBtn_ok() {
+		return btn_ok;
+	}
 	
 }

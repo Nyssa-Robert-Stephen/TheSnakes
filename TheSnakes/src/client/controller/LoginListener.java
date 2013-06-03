@@ -21,6 +21,7 @@ public class LoginListener implements ActionListener{
 		if(lp.getCf().getSnakeGame().getTheServer().login(lp.getTxt_uname().getText().toString(),lp.getTxt_pwd().getText().toString())){
 			lp.getCf().getLSB().getIp().getLogin().setEnabled(false);
 			lp.getCf().getLSB().getIp().getRegister().setEnabled(false);
+			lp.getBtn_ok().addKeyListener(new MoveListener(lp.getCf()));
 			
 		}
 	} catch (RemoteException e) {

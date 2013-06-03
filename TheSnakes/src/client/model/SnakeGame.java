@@ -94,9 +94,9 @@ public class SnakeGame extends UnicastRemoteObject{
 		return true;
 	}
 	
-	public boolean JoinServer(String name, int pos) {
+	public boolean JoinServer(String name, int pos,String ip) {
 		try{
-		theServer  = (SnakeServer) Naming.lookup("//localhost/SnakeServer");
+		theServer  = (SnakeServer) Naming.lookup("//"+ ip + "/SnakeServer");
 		System.out.println("Succeded");
 		theServer.addPlayer(name, cb,pos);
 

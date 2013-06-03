@@ -102,7 +102,7 @@ public class TheServer extends UnicastRemoteObject
 						{
 							String name = p.getName();
 							CallBack cb = clientMap.get(name);
-							cb.sendPlayerStatus(SnakeGameInterface.STATUS_WIN);
+							//cb.sendPlayerStatus(SnakeGameInterface.STATUS_WIN);
 							int foodIntake = p.getScore();
 							int score = 4 * foodIntake;
 							

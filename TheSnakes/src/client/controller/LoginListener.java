@@ -9,7 +9,7 @@ import client.view.LeftSideBarPackage.LoginPanel;
 public class LoginListener implements ActionListener{
 	LoginPanel lp;
 	public LoginListener(LoginPanel cf){
-		this.lp = lp;
+		this.lp = cf;
 	}
 	@Override
 	public void actionPerformed(ActionEvent arg0) {

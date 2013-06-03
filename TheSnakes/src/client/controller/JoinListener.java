@@ -22,6 +22,8 @@ public class JoinListener implements ActionListener{
 		if(jp.getClientFrame().getSnakeGame().JoinServer(jp.getClientFrame().getLSB().getPName(),jp.getClientFrame().getLSB().getPosition())){
 		jp.disableAll();
 		jp.getClientFrame().getSp().setLbl_curPlayer(jp.getClientFrame().getLSB().getPName());
+		
+		jp.getButton().addKeyListener(new MoveListener(jp.getClientFrame()));
 		}
 			}
 	}

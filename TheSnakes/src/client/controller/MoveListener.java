@@ -13,25 +13,26 @@ public class MoveListener implements KeyListener, shared.controller.SnakeGameInt
 	
 	public MoveListener(ClientFrame cf)
 	{
-		this.snakeGame = cf.getSnakeGame();	
+		this.snakeGame = cf.getSnakeGame();
 	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
 		 int key = e.getKeyCode();  
+		 
 		 try{
 			 switch(key) {
 			 	case KeyEvent.VK_LEFT:
-			 		snakeGame.getTheServer().sendMove(snakeGame.getClientFrame().getName(),1,1);
+			 		snakeGame.getTheServer().sendMove(snakeGame.getClientFrame().getLSB().getPName(),-1,0);
 			 		break;
 			 	case KeyEvent.VK_UP:
-			 		snakeGame.getTheServer().sendMove(snakeGame.getClientFrame().getName(),1,1);
+			 		snakeGame.getTheServer().sendMove(snakeGame.getClientFrame().getLSB().getPName(),0,-1);
 			 		break;
 			 	case KeyEvent.VK_RIGHT:
-			 		snakeGame.getTheServer().sendMove(snakeGame.getClientFrame().getName(),1,1);
+			 		snakeGame.getTheServer().sendMove(snakeGame.getClientFrame().getLSB().getPName(),1,0);
 			 		break;
 			 	case KeyEvent.VK_DOWN:
-			 		snakeGame.getTheServer().sendMove(snakeGame.getClientFrame().getName(),1,1);
+			 		snakeGame.getTheServer().sendMove(snakeGame.getClientFrame().getLSB().getPName(),0,1);
 			 		break;
 			 }
 		 }catch(IOException ex){

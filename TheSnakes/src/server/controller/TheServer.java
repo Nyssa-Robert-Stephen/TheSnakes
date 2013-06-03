@@ -147,8 +147,8 @@ public class TheServer extends UnicastRemoteObject
 		//checkDatabase() returns a boolean
 		//however it won't work unless you're absolutely certain the server is running on Nyssa's laptop
 		//The Official Home of The Snakes Database
-		//return db.checkDatabase(username, password);
-		return true;
+		return db.checkDatabase(username, password);
+		//return true;
 	}
 	@Override
 	public boolean regsiter(String username, String password, String firstname,
@@ -157,8 +157,8 @@ public class TheServer extends UnicastRemoteObject
 		//inputIntoDatabase() returns a boolean
 		//however it won't work unless you're absolutely certain the server is running on Nyssa's laptop
 		//The Official Home of The Snakes Database
-		//return db.inputIntoDatabase(username, password, firstname, lastname, address, ph_number);
-		return true;
+		return db.inputIntoDatabase(username, password, firstname, lastname, address, ph_number);
+		//return true;
 	}
 	@Override
 	public boolean addPlayer(String name, CallBack cb, int position) throws RemoteException {

@@ -23,10 +23,7 @@ public class SnakeGame extends UnicastRemoteObject{
 	public SnakeGame(ClientFrame cf ) throws RemoteException
 	{
 		this.setClientFrame(cf);
-		cf.setSnakeGame(this);
-
-		//RMI join server stuff goes here.
-	
+		cf.setSnakeGame(this);	
 	}
 	private void createGame() throws RemoteException{
 
@@ -66,7 +63,9 @@ public class SnakeGame extends UnicastRemoteObject{
 	}
 
 	public void CreateServer(int players, Point bounds,int port) throws AlreadyBoundException, RemoteException{
-		TheServer server = new TheServer(players, bounds, port);
+		theServer = new TheServer(players, bounds, port);
+		if(theServer!=null)
+			System.out.println("I am in CreateServer()");
 		
 	}
 
@@ -79,6 +78,7 @@ public class SnakeGame extends UnicastRemoteObject{
 	}
 
 	public SnakeServer getTheServer() {
+		System.out.println("I am in getTheServer");
 		return theServer;
 	}
 

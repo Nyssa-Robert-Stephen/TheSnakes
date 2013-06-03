@@ -11,6 +11,11 @@ public class DBHandler {
 	
 	private Connection connection;
 	
+	public DBHandler()
+	{
+		System.out.println("Welcome to the database!");
+	}
+	
 	public boolean openDatabase()
 	{
 		try {
@@ -23,10 +28,10 @@ public class DBHandler {
 			
 			return true;
 		} catch (ClassNotFoundException e) {
-			//e.printStackTrace();
+			e.printStackTrace();
 			return false;
 		} catch (SQLException e) {
-			//e.printStackTrace();
+			e.printStackTrace();
 			return false;
 		}
 	}

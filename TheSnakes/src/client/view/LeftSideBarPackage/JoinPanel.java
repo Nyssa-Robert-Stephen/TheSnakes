@@ -38,11 +38,14 @@ public class JoinPanel extends JPanel implements shared.controller.SnakeGameInte
 		this.add(lbl_join);
 		this.add(join);
 		join.addActionListener(new JoinListener(this));
-		join.addKeyListener(new MoveListener(cf2));
+		//join.addKeyListener(new MoveListener(cf2));
 		this.setLayout(new GridLayout(5,2));
 	}
 	public JTextField getIp() {
 		return text_ip;
+	}
+	public JButton getButton() {
+		return join;
 	}
 	public JComboBox getCbx_port() {
 		return cbx_port;

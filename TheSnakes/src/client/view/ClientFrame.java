@@ -39,7 +39,6 @@ public class ClientFrame extends JFrame implements shared.controller.SnakeGameIn
 	        this.add(lsb);
 	        this.add(empty1);
 	        this.add(empty2);
-		       this.lsb.getIp().getJoin().addKeyListener(new MoveListener(this));
 	        
 	        //grid.addKeyListener(new MoveListener(this));
 	        

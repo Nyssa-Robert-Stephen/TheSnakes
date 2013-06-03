@@ -68,8 +68,8 @@ public class InitialPanel extends JPanel{
 		btn_join.setEnabled(false);
 		btn_create.setEnabled(false);
 		name.setEnabled(false);
-		btn_register.setEnabled(false);
-		btn_login.setEnabled(false);
+		//btn_register.setEnabled(false);
+		//btn_login.setEnabled(false);
 	}
 	
 	public void enableJoin(){
